@@ -18,12 +18,10 @@ option(BUILD_TEST_PROJECT "Test project to test the functionality" ON)
 # Dependencies
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 
+# Test project
 if(BUILD_TEST_PROJECT)
-    add_executable(test_project 
-        test_project/main.cpp
-        test_project/qml.qrc
-    )
-    
-    target_compile_options(test_project PRIVATE -Wall -Wextra -Wpedantic -Werror)
-    target_link_libraries(test_project PRIVATE Qt5::Core Qt5::Quick)
+    add_subdirectory(test_project)
 endif()
+
+# QML module
+add_subdirectory(module)
