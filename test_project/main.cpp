@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QDebug>
 
 
 int main(int argc, char *argv[])
@@ -16,6 +17,11 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
+
+    // Import path for bin directory
+    qDebug() << "Adding import path: " << QGuiApplication::applicationDirPath() + "../module";
+    engine.addImportPath(QGuiApplication::applicationDirPath() + "/../module");
+    
     engine.load(url);
 
     return app.exec();

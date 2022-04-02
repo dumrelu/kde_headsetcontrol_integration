@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
+import kde_headsetcontrol_integration 1.0
 
 Window {
     width: 640
@@ -7,13 +8,7 @@ Window {
     visible: true
     title: qsTr("Hello World")
 
-    Rectangle {
-        anchors.fill: parent
-        color: "red"
+    TestType {
         
-        Text {
-            anchors.centerIn: parent
-            text: "Hello World!"
-        }
     }
 }
