@@ -52,10 +52,10 @@ void HeadsetControl::initializeBatteryInfo()
     m_batteryInfo[keys::PRETTY_NAME] = "N/A";
     m_batteryInfo[keys::PERCENT] = 0;
     m_batteryInfo[keys::CAPACITY] = 100;
-    m_batteryInfo[keys::STATE] = state::CHARGING;
-    m_batteryInfo[keys::TYPE] = ""; //TODO
+    m_batteryInfo[keys::STATE] = state::DISCHARGING;
+    m_batteryInfo[keys::TYPE] = "";
     m_batteryInfo[keys::PLUGGED_IN] = true;
-    m_batteryInfo[keys::IS_POWER_SUPPLY] = false;
+    m_batteryInfo[keys::IS_POWER_SUPPLY] = true;
 }
 
 void HeadsetControl::initializeHeadsetControlProcess()
@@ -107,7 +107,6 @@ void HeadsetControl::onProcessFinished(int exitCode, QProcess::ExitStatus exitSt
         qDebug() << "Exit code not 0, probably headset is disconnected";
         qDebug() << allOutput;
 
-        //TODO: is this correct?
         m_batteryInfo.insert(keys::PLUGGED_IN, false);
 
         return;
@@ -156,5 +155,5 @@ void HeadsetControl::onProcessFinished(int exitCode, QProcess::ExitStatus exitSt
     m_batteryInfo.insert(keys::PRETTY_NAME, headsetName);
     m_batteryInfo.insert(keys::PERCENT, percentage);
     m_batteryInfo.insert(keys::STATE, isCharging ? state::CHARGING : state::DISCHARGING);
-    m_batteryInfo[keys::PLUGGED_IN] = true;
+    m_batteryInfo.insert(keys::PLUGGED_IN, true);
 }

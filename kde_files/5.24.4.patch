@@ -1,0 +1,30 @@
+--- PopupDialog.qml	2022-04-02 18:59:00.891298958 +0300
++++ /usr/share/plasma/plasmoids/org.kde.plasma.battery/contents/ui/PopupDialog.qml	2022-04-02 19:00:50.088371722 +0300
+@@ -13,6 +13,8 @@
+ import org.kde.plasma.core 2.1 as PlasmaCore
+ import org.kde.plasma.extras 2.0 as PlasmaExtras
+ 
++import kde_headsetcontrol_integration 1.0
++
+ PlasmaComponents3.Page {
+     id: dialog
+ 
+@@ -139,6 +141,18 @@
+                 onActivateProfileRequested: dialog.activateProfileRequested(profile)
+             }
+ 
++            BatteryItem {
++                Layout.fillWidth: true
++
++                battery: headsetControl.batteryInfo
++                remainingTime: dialog.remainingTime
++                matchHeightOfSlider: brightnessSlider.slider
++
++                HeadsetControl {
++                    id: headsetControl
++                }
++            }
++
+             PlasmaComponents3.ScrollView {
+                 id: batteryScrollView
+ 
