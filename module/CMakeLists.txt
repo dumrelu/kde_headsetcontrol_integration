@@ -20,6 +20,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME})
 add_library(headsetcontrol SHARED
     headsetcontrol_plugin.h
     headsetcontrol_plugin.cpp
+    HeadsetControl.h
+    HeadsetControl.cpp
 )
 
 target_link_libraries(headsetcontrol Qt5::Core Qt5::Quick)

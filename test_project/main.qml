@@ -9,6 +9,16 @@ Window {
     title: qsTr("Hello World")
 
     TestType {
-        
+
+    }
+
+    HeadsetControl {
+        id: headsetControl
+    }
+
+    Text {
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: headsetControl.testMessage
     }
 }
