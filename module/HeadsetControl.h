@@ -27,13 +27,20 @@ signals:
 private:
     void initializeBatteryInfo();
     void initializeHeadsetControlProcess();
-    void initializePollingTimer();
+    void initializeTimers();
 
     void onPollingTimerTimeout();
+    void onChargeAnimationTimeout();
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-
+    
     QTimer m_pollingTimer;
+    int m_pollingIntervalSeconds = 10;
+
+    QTimer m_chargeAnimationTimer;
+    int m_chargeAnimationIntervalSeconds = 1;
+    int m_chargeAnimationAddedValue = 10;
+
+
     QProcess m_headsetControlProcess;
     QQmlPropertyMap m_batteryInfo;
-    int m_pollingIntervalSeconds = 10;
 };

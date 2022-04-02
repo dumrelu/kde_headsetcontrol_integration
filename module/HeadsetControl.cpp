@@ -24,7 +24,7 @@ HeadsetControl::HeadsetControl(QObject* parent)
 {
     initializeBatteryInfo();
     initializeHeadsetControlProcess();
-    initializePollingTimer();
+    initializeTimers();
 }
 
 int HeadsetControl::pollingIntervalSeconds() const
@@ -68,10 +68,13 @@ void HeadsetControl::initializeHeadsetControlProcess()
         this, &HeadsetControl::onProcessFinished);
 }
 
-void HeadsetControl::initializePollingTimer()
+void HeadsetControl::initializeTimers()
 {
     m_pollingTimer.setInterval(std::chrono::seconds{ m_pollingIntervalSeconds });
     connect(&m_pollingTimer, &QTimer::timeout, this, &HeadsetControl::onPollingTimerTimeout);
+
+    m_chargeAnimationTimer.setInterval(std::chrono::seconds(m_chargeAnimationIntervalSeconds));
+    connect(&m_chargeAnimationTimer, &QTimer::timeout, this, &HeadsetControl::onChargeAnimationTimeout);
 
     onPollingTimerTimeout();
     m_pollingTimer.start();
@@ -87,6 +90,13 @@ void HeadsetControl::onPollingTimerTimeout()
 
     qDebug() << "Starting process";
     m_headsetControlProcess.start();
+}
+
+void HeadsetControl::onChargeAnimationTimeout()
+{
+    auto percentage = m_batteryInfo.value(keys::PERCENT).toInt();
+    percentage = (percentage + m_chargeAnimationAddedValue) % 100;
+    m_batteryInfo.insert(keys::PERCENT, percentage);
 }
 
 void HeadsetControl::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -108,7 +118,6 @@ void HeadsetControl::onProcessFinished(int exitCode, QProcess::ExitStatus exitSt
         qDebug() << allOutput;
 
         m_batteryInfo.insert(keys::PLUGGED_IN, false);
-
         return;
     }
     
@@ -153,7 +162,16 @@ void HeadsetControl::onProcessFinished(int exitCode, QProcess::ExitStatus exitSt
 
     // Update the battery info object
     m_batteryInfo.insert(keys::PRETTY_NAME, headsetName);
-    m_batteryInfo.insert(keys::PERCENT, percentage);
+    if(isCharging)
+    {
+        m_chargeAnimationTimer.start();
+    }
+    else
+    {
+        m_batteryInfo.insert(keys::PERCENT, percentage);
+        m_chargeAnimationTimer.stop();
+
+    }
     m_batteryInfo.insert(keys::STATE, isCharging ? state::CHARGING : state::DISCHARGING);
     m_batteryInfo.insert(keys::PLUGGED_IN, true);
 }
