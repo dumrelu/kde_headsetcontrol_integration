@@ -1,6 +1,8 @@
 #include "headsetcontrol_plugin.h"
 
+#include <QQmlEngine>
+
 void HeadsetControlPlugin::registerTypes(const char* uri)
 {
-    Q_UNUSED(uri);
+    qmlRegisterModule(uri, 1, 0);
 }

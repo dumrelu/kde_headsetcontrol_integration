@@ -1,5 +1,5 @@
 module @MODULE_NAME@
 
-# TODO: plugin cpppluginname
+plugin headsetcontrol
 
 TestType 1.0 TestType.qml
