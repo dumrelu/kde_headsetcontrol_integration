@@ -26,4 +26,4 @@ add_library(headsetcontrol SHARED
 
 target_link_libraries(headsetcontrol Qt5::Core Qt5::Quick)
 
-# TODO: install code
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME} DESTINATION /usr/lib/qt/qml)

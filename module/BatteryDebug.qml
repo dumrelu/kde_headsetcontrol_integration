@@ -9,13 +9,6 @@ Item {
 
     property var batteryInfo
 
-    ListModel {
-        id: propertyModel
-        ListElement {
-            propName: "Pretty Name"
-        }
-    }
-
     ListView {
         id: listView
 
