@@ -60,8 +60,8 @@ void HeadsetControl::initializeBatteryInfo()
 
 void HeadsetControl::initializeHeadsetControlProcess()
 {
-    m_headsetControlProcess.setProgram("sleep");
-    m_headsetControlProcess.setArguments(QStringList{} << "3s");
+    m_headsetControlProcess.setProgram("headsetcontrol");
+    m_headsetControlProcess.setArguments(QStringList{} << "-b");
     m_headsetControlProcess.setProcessChannelMode(QProcess::MergedChannels);
 
     connect(&m_headsetControlProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), 
@@ -99,13 +99,63 @@ void HeadsetControl::onProcessFinished(int exitCode, QProcess::ExitStatus exitSt
         return;
     }
 
+    // Channels are merged, readAll returns stdout + stderr
+    QString allOutput{ m_headsetControlProcess.readAll() };
+
     if(exitCode != 0)
     {
         qDebug() << "Exit code not 0, probably headset is disconnected";
+        qDebug() << allOutput;
+
         //TODO: set state
 
         return;
     }
     
+    auto outputLines = allOutput.split('\n');
+    if(outputLines.size() < 2)
+    {
+        qDebug() << "Expecting at least 2 lines of output.";
+        return;
+    }
+    
+    // Parse the name of the headset. First line of the out should be "Found Logitech G533!"
+    auto firstLineWords = outputLines[0].split(' ');
+    firstLineWords.removeFirst();
 
+    auto headsetName = firstLineWords.join(' ');
+    if(!headsetName.isEmpty())
+    {
+        headsetName.remove(headsetName.size() - 1, 1);
+    }
+
+    // Parse the battery status. Second line is either "Battery: X%" or "Battery: Charging"
+    auto secondLineWords = outputLines[1].split(' ');
+    secondLineWords.removeFirst();
+
+    int percentage = 0;
+    bool isCharging = false;
+    if(!secondLineWords.isEmpty())
+    {
+        auto percentageString = secondLineWords.last();
+
+        if(percentageString == "Charging")
+        {
+            isCharging = true;
+        }
+        else
+        {
+            percentageString.remove(percentageString.size() - 1, 1);
+            percentage = percentageString.toInt();
+        }
+    }
+
+
+    // Update the battery info object
+    m_batteryInfo.insert(keys::PRETTY_NAME, headsetName);
+    if(!isCharging)
+    {
+        m_batteryInfo.insert(keys::PERCENT, percentage);
+    }
+    m_batteryInfo.insert(keys::STATE, isCharging ? state::CHARGING : state::DISCHARGING);
 }
