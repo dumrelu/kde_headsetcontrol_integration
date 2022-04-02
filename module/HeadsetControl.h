@@ -2,17 +2,23 @@
 
 #include <QObject>
 #include <QString>
+#include <QQmlPropertyMap>
 
 class HeadsetControl : public QObject 
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString testMessage READ testMessage CONSTANT)
+    Q_PROPERTY(QQmlPropertyMap* batteryInfo READ batteryInfo NOTIFY batteryInfoChanged)
 public:
     explicit HeadsetControl(QObject* parent = nullptr);
 
-    QString testMessage() const { return "Hello From C++!"; }
+    QQmlPropertyMap* batteryInfo();
+
+signals:
+    void batteryInfoChanged();
 
 private:
+    void initializeBatteryInfo();
 
+    QQmlPropertyMap m_batteryInfo;
 };

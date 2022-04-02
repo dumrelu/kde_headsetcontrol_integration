@@ -2,4 +2,4 @@ module @MODULE_NAME@
 
 plugin headsetcontrol
 
-TestType 1.0 TestType.qml
+BatteryDebug 1.0 BatteryDebug.qml

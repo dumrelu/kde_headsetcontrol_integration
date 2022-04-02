@@ -9,7 +9,7 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME})
 configure_file(qmldir.in ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}/qmldir @ONLY)
 
 # Copy QML files
-set(QML_FILES TestType.qml)
+set(QML_FILES BatteryDebug.qml)
 foreach(qml_file IN LISTS QML_FILES)
     configure_file(${qml_file} ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME} COPYONLY)
 endforeach()
