@@ -13,3 +13,15 @@ set(QML_FILES TestType.qml)
 foreach(qml_file IN LISTS QML_FILES)
     configure_file(${qml_file} ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME} COPYONLY)
 endforeach()
+
+# C++ plugin
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME})
+
+add_library(headsetcontrol SHARED
+    headsetcontrol_plugin.h
+    headsetcontrol_plugin.cpp
+)
+
+target_link_libraries(headsetcontrol Qt5::Core Qt5::Quick)
+
+# TODO: install code
