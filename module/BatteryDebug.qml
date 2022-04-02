@@ -28,14 +28,6 @@ Item {
 
             visible: !modelData.startsWith("_") && !modelData.endsWith("Changed") && !["keys", "objectName"].includes(modelData)
             height: visible ? implicitHeight : 0
-
-            Component.onCompleted: {
-                console.log(modelData);
-            }
         }
-    }
-
-    Component.onCompleted: {
-        console.log(JSON.stringify(Object.keys(batteryInfo)))
     }
 }
