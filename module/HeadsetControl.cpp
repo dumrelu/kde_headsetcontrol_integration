@@ -95,6 +95,7 @@ void HeadsetControl::onPollingTimerTimeout()
 void HeadsetControl::onChargeAnimationTimeout()
 {
     auto percentage = m_batteryInfo.value(keys::PERCENT).toInt();
+    percentage = (percentage / 10) * 10;
     percentage = (percentage + m_chargeAnimationAddedValue) % 100;
     m_batteryInfo.insert(keys::PERCENT, percentage);
 }
